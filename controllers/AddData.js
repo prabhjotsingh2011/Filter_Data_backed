@@ -34,8 +34,8 @@ class AddData {
             const allselectedCountries = countries.map((item) => {
                 return item.value
             })
-            const startDate = new Date(fromYear);
-            const endDate = new Date(toYear);
+            const startDate = new Date(fromYear.value);
+            const endDate = new Date(toYear.value);
 
             if ((countries.length === 0 && fromYear === "" && toYear === "")
                 || (countries.length === 0 && fromYear !== "" && toYear !== "")
@@ -76,6 +76,13 @@ class AddData {
             }
             else if (countries.length !== 0 && fromYear !== "" && toYear !== "") {
                 const data = await DummyData.find({ country: { $in: allselectedCountries }, date: { $gte: fromYear, $lte: toYear } })
+                
+                if(fromYear.value < 1960 || toYear.value > 2023){
+                    return res.status(200).json({
+                        message: "Please enter Year between 1960 to 2023",
+                    });
+                  }
+
                 let separateData = [];
                 for (let i = 0; i < allselectedCountries.length; i++) {
                     let temp = data.filter((item) => {
